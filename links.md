@@ -10,3 +10,7 @@ https://github.com/Matt-Esch/virtual-dom/wiki
 http://calendar.perfplanet.com/2013/diff/
 http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html
 https://facebook.github.io/react/docs/reconciliation.html
+[HTMLBars Deep Dive](https://www.youtube.com/watch?v=DrFXw0QGDLM)
+https://news.ycombinator.com/item?id=9155564
+http://blog.letitialew.com/post/30425074101/repaints-and-reflows-manipulating-the-dom
+http://www.phpied.com/rendering-repaint-reflowrelayout-restyle/
