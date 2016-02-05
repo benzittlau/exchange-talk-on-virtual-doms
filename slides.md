@@ -142,25 +142,6 @@ renderB: <div><span>second</span><span>first</span></div>
 ![](img/virtual-dom-model.jpg)
 
 
-
-## Ember (and Glimmer)
-Ember uses an engine called "Glimmer" to manage it's in-memory representation of the DOM
-
-It's strategy is different.
-
-Uses bindings to have a handle to directly where it needs to mutate it's virtual DOM to avoid full renders.
-
-Leverages htmlbars to differentiate between static and dynamic components, to avoid checking static components for changes.
-
-Stores it's virtual DOM representation as lightweight "stream-like objects" instead of full objects.
-
-
-
-## The DOM Model
-DOM trees have one node for each tag and one node for the text between nodes.
-
-
-
 ## Update Batching
 Ensure that there is at most one layout performed each time you update the state of the page.
 
@@ -172,15 +153,47 @@ In Ember this ensures that a change to a property and all it's related propertie
 
 
 ## Using the request animation frame
-A common strategy is to use an event "loop", where during one iteration of the loop all changes are batched, and "flushed" once per loop.
+HTML5 has a [`requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) API
 
-In Ember this ensures that a change to a property and all it's related properties downstream will only trigger a single update.
+> The Window.requestAnimationFrame() method tells the browser that you wish to perform an animation and requests that the browser call a specified function to update an animation before the next repaint. The method takes as an argument a callback to be invoked before the repaint.
+
+In React the batching strategy is pluggable, so one using `requestAnimationFrame` has been implemented as a [proof of concept](https://github.com/petehunt/react-raf-batching)
+
+
+
+## Ember (and Glimmer)
+Ember uses an engine called "Glimmer" to manage it's in-memory representation of the DOM
+
+It's strategy is different.
+
+Leverages HTMLbars (it's templating engine) to differentiate between static and dynamic components, to avoid checking static components for changes.
+
+Stores it's virtual DOM representation as lightweight "stream-like objects" instead of full objects.
+
+
+## Ember Streams
+DOM trees have one node for each tag and one node for the text between nodes.
+
+Embers streams represent the same *structure* in a very light way:
+
+![](img/ember-streams.jpg)
+
+[Source](https://www.youtube.com/watch?v=DrFXw0QGDLM)
+
+
+## Ember Bindings
+Ember has bindings so it can observe changes to `values` and inject those changes.
+
+![](img/glimmer-model.jpg)
+
+
 
 ## Write only algorithms
+Both React and Ember's algorithms for updating the DOM are *write-only*
 
+The assume that their model of the world is accurate based on the belief that they *created* the world and have mutated it in sync with their own model of it through every variation of state.
 
-
-## Custom Event Systems
+This means that you should *not* touch the DOM other than through their objects.
 
 
 
@@ -190,3 +203,24 @@ This technology is still very immature and evolving.
 Differences in the structures of Ember and React have taken them down very different paths towards addressing similar problems.
 
 What we think of as "Virtual DOM" is a combination of different technologies acting in coordination with each other.  Understanding how your components and data models affect rendering performance will help you write better application structures from the start.
+
+
+
+## References
+[React - Advanced Performance](https://facebook.github.io/react/docs/advanced-performance.html)
+[Ember - Array Computed Refactor](http://www.thesoftwaresimpleton.com/blog/2015/04/18/arraycomputed-refactor/)
+[Virtual Dom vs Incremental Dom vs Glimmer](https://auth0.com/blog/2015/11/20/face-off-virtual-dom-vs-incremental-dom-vs-glimmer/)
+[React - Glimmer Announcement](https://github.com/emberjs/ember.js/pull/10501)
+[React - Component Lifecycle](https://facebook.github.io/react/docs/component-specs.html)
+[React - Terminology](https://facebook.github.io/react/docs/glossary.html)
+[React - Batch Updating](http://www.simonkrueger.com/2015/11/06/Batch-Updating-In-React.html)
+[The Secret's of React's Virtual DOM](http://conferences.oreilly.com/fluent/fluent2014/public/schedule/detail/32395)
+[Virtual COM (library)](https://github.com/Matt-Esch/virtual-dom/wiki)
+[React's Diff Algorithm](http://calendar.perfplanet.com/2013/diff/)
+[Change and it's Detection](http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html)
+[React - Reconciliation](https://facebook.github.io/react/docs/reconciliation.html)
+[HTMLBars Deep Dive](https://www.youtube.com/watch?v=DrFXw0QGDLM)
+[Why is the DOM slow?](https://news.ycombinator.com/item?id=9155564)
+[Repaints and Reflows](http://blog.letitialew.com/post/30425074101/repaints-and-reflows-manipulating-the-dom)
+[Rendering Repaint and Reflow](http://www.phpied.com/rendering-repaint-reflowrelayout-restyle/)
+
